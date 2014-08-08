@@ -10,11 +10,6 @@
 #define PRINCDLL_API __declspec(dllimport)
 #endif
 
-
-extern PRINCDLL_API int nPrincDll;
-
-PRINCDLL_API int fnPrincDll(void);
-
 //functions
 
 extern "C" PRINCDLL_API void ServiceMain(int argc, wchar_t* argv[]);
