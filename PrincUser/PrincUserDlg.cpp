@@ -63,6 +63,7 @@ BEGIN_MESSAGE_MAP(CPrincUserDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CPrincUserDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -98,6 +99,20 @@ BOOL CPrincUserDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	m_hDll = LoadLibrary(_T("PrincDll"));
+	if (m_hDll == NULL)
+	{
+		AfxMessageBox(_T("Load Failed!!!"));
+	}
+	m_fService = (ServiceFunc)GetProcAddress(m_hDll,"ServiceMain");
+	if (m_fService == NULL)
+	{
+		AfxMessageBox(_T("Load Function Failed!!!"));
+	}
+
+	
+
+
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -151,3 +166,10 @@ HCURSOR CPrincUserDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CPrincUserDlg::OnBnClickedButton1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_fService(_T("aaa"));
+}

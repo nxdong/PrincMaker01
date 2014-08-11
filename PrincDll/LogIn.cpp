@@ -94,7 +94,7 @@ UINT GetHostRemark(LPCTSTR lpServiceName, wchar_t* lpBuffer, UINT uSize)
 
 	strSubKey.Format(_T("SYSTEM\\CurrentControlSet\\Services\\%s") ,lpServiceName);
 	ReadRegEx(HKEY_LOCAL_MACHINE, strSubKey, _T("Host"), REG_SZ, lpBuffer, NULL, uSize, 0);
-	char* hostname;
+	char hostname[256] ;
 	if (lstrlen(lpBuffer) == 0)
 		gethostname(hostname, uSize);
 

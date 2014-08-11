@@ -70,7 +70,7 @@ bool CClientSocket::Connect(LPCTSTR lpszHost, UINT nPort)
 			NULL,NULL );
 		pHost = new char[iTextLen + 1];
 		memset( ( void* )pHost, 0, sizeof( char ) * ( iTextLen + 1 ) );
-		::WideCharToMultiByte( CP_ACP,
+		WideCharToMultiByte( CP_ACP,
 			0,lpszHost,
 			-1,pHost,
 			iTextLen,

